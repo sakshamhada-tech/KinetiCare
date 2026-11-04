@@ -1,0 +1,21 @@
+node_modules/
+dist/
+build/
+*.log
+.env
+.env.local
+*.tsbuildinfo
+coverage/
+.nyc_output/
+artifacts/screenshots/
+playwright-report/
+test-results/
+# MediaPipe model (large binary, downloaded by setup:models, checksum-verified)
+apps/web/public/mediapipe/*.task
+apps/web/public/mediapipe/*.task.sha256
+# OS
+.DS_Store
+Thumbs.db
+
+# Runtime test / seed databases (not source)
+apps/server/data/
