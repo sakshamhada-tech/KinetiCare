@@ -10,9 +10,10 @@ coverage/
 artifacts/screenshots/
 playwright-report/
 test-results/
-# MediaPipe model (large binary, downloaded by setup:models, checksum-verified)
+# MediaPipe model + WASM assets (downloaded/copied by setup scripts, not committed)
 apps/web/public/mediapipe/*.task
 apps/web/public/mediapipe/*.task.sha256
+apps/web/public/mediapipe/wasm/
 # OS
 .DS_Store
 Thumbs.db

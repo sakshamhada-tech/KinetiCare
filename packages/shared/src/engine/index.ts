@@ -7,3 +7,4 @@ export * from './rep-machine';
 export * from './faults';
 export * from './fatigue';
 export * from './synthetic';
+export * from './pose-source';

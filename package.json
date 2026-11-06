@@ -22,9 +22,11 @@
     "format": "prettier --check .",
     "test:unit": "npm --prefix packages/shared run test && npm --prefix apps/web run test",
     "test:api": "npm --prefix apps/server run test",
-    "test:e2e": "if ls -d ~/.cache/ms-playwright/chromium-* ~/.cache/ms-playwright/firefox-* ~/.cache/ms-playwright/webkit-* 2>/dev/null | grep -q .; then npx playwright test; else echo '[e2e] SKIPPED: no Playwright browser installed; run `npx playwright install chromium` to enable E2E tests'; fi",
-    "verify": "npm ci && npm run typecheck && npm run lint && npm run format && npm run test:unit && npm run test:api && npm run build && npm run bundle:sanity && npm run test:e2e && npm audit --omit=dev",
-    "bundle:sanity": "node scripts/bundle-sanity.js"
+    "test:e2e": "if ls -d ~/.cache/ms-playwright/chromium-* ~/.cache/ms-playwright/firefox-* ~/.cache/ms-playwright/webkit-* 2>/dev/null | grep -q .; then npx playwright test; else echo '[e2e] FAILED: no Playwright browser installed; run `npx playwright install chromium` to enable E2E tests' >&2; exit 1; fi",
+    "record:fixture": "node scripts/record-pose-fixture.js",
+    "verify": "npm ci && npm run typecheck && npm run lint && npm run format && npm run test:unit && npm run test:api && npm run build && npm run bundle:sanity && npm run test:e2e && npm run verify:scripts && npm audit --omit=dev",
+    "bundle:sanity": "node scripts/bundle-sanity.js",
+    "verify:scripts": "node scripts/verify-scripts-exist.js"
   },
   "workspaces": [
     "apps/web",

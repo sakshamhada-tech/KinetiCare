@@ -68,6 +68,7 @@ npm run dev
 ```
 
 This starts both workspaces concurrently:
+
 - **Web (Vite dev server):** `http://127.0.0.1:5173`
 - **API server (Fastify):** `http://127.0.0.1:8080`
 
@@ -91,37 +92,37 @@ Equivalent to `npm run build && node apps/server/dist/cli.js`. The server reads 
 
 ## Available npm scripts
 
-| Script | Purpose |
-|--------|---------|
-| `npm run setup` | Full one-time setup: install + copy assets + setup models + seed DB |
-| `npm run dev` | Run web + server in dev mode concurrently |
-| `npm run build` | Build web (Vite) + server (tsc) |
-| `npm run start` | Build + start production server |
-| `npm run typecheck` | `tsc --noEmit` across all workspaces |
-| `npm run lint` | ESLint (0 errors + 0 warnings) |
-| `npm run format` | Prettier check |
-| `npm run test:unit` | Shared engine tests + web component tests |
-| `npm run test:api` | Server API/integration tests |
-| `npm run test:e2e` | Playwright E2E (skips with logged reason if no browser installed) |
-| `npm run bundle:sanity` | Verify prod bundle has no external URLs or test-only code |
-| `npm run verify` | Full quality gate: `npm ci` → typecheck → lint → format → unit tests → API tests → build → bundle sanity → E2E → `npm audit --omit=dev` |
-| `npm run db:seed` | Seed the SQLite database |
-| `npm run db:reset` | Reset the database |
+| Script                  | Purpose                                                                                                                                 |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run setup`         | Full one-time setup: install + copy assets + setup models + seed DB                                                                     |
+| `npm run dev`           | Run web + server in dev mode concurrently                                                                                               |
+| `npm run build`         | Build web (Vite) + server (tsc)                                                                                                         |
+| `npm run start`         | Build + start production server                                                                                                         |
+| `npm run typecheck`     | `tsc --noEmit` across all workspaces                                                                                                    |
+| `npm run lint`          | ESLint (0 errors + 0 warnings)                                                                                                          |
+| `npm run format`        | Prettier check                                                                                                                          |
+| `npm run test:unit`     | Shared engine tests + web component tests                                                                                               |
+| `npm run test:api`      | Server API/integration tests                                                                                                            |
+| `npm run test:e2e`      | Playwright E2E (skips with logged reason if no browser installed)                                                                       |
+| `npm run bundle:sanity` | Verify prod bundle has no external URLs or test-only code                                                                               |
+| `npm run verify`        | Full quality gate: `npm ci` → typecheck → lint → format → unit tests → API tests → build → bundle sanity → E2E → `npm audit --omit=dev` |
+| `npm run db:seed`       | Seed the SQLite database                                                                                                                |
+| `npm run db:reset`      | Reset the database                                                                                                                      |
 
 ## Configuration (environment variables)
 
 All read by the server via Zod validation (`apps/server/src/index.ts`):
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `NODE_ENV` | `development` | `development` \| `production` \| `test` |
-| `PORT` | `8080` | API server port |
-| `HOST` | `127.0.0.1` | Bind host (loopback only by default) |
-| `APP_ORIGIN` | `http://127.0.0.1:5173` | CORS origin locked to the web app |
-| `DB_PATH` | `./data/kineticare.db` | SQLite database file path |
-| `OLLAMA_BASE_URL` | `http://127.0.0.1:11434` | Ollama API base URL |
-| `OLLAMA_MODEL` | `llama3:8b-instruct` | Ollama model name |
-| `OLLAMA_TIMEOUT_MS` | `30000` | Ollama request timeout |
+| Variable            | Default                  | Description                             |
+| ------------------- | ------------------------ | --------------------------------------- |
+| `NODE_ENV`          | `development`            | `development` \| `production` \| `test` |
+| `PORT`              | `8080`                   | API server port                         |
+| `HOST`              | `127.0.0.1`              | Bind host (loopback only by default)    |
+| `APP_ORIGIN`        | `http://127.0.0.1:5173`  | CORS origin locked to the web app       |
+| `DB_PATH`           | `./data/kineticare.db`   | SQLite database file path               |
+| `OLLAMA_BASE_URL`   | `http://127.0.0.1:11434` | Ollama API base URL                     |
+| `OLLAMA_MODEL`      | `llama3:8b-instruct`     | Ollama model name                       |
+| `OLLAMA_TIMEOUT_MS` | `30000`                  | Ollama request timeout                  |
 
 ## API reference
 
@@ -133,39 +134,39 @@ Base URL: `http://127.0.0.1:8080` (configurable via `PORT`/`HOST`). All response
 
 ### Patients
 
-| Method | Endpoint | Body | Description |
-|--------|----------|------|-------------|
-| `GET` | `/api/patients?page=&page_size=` | — | Paginated patient list |
-| `GET` | `/api/patients/:id` | — | Single patient |
-| `POST` | `/api/patients` | `{ name, pseudonymous_id, notes? }` | Create patient (409 on duplicate `pseudonymous_id`) |
-| `PUT` | `/api/patients/:id` | `{ name?, pseudonymous_id?, notes? }` | Update patient |
+| Method | Endpoint                         | Body                                  | Description                                         |
+| ------ | -------------------------------- | ------------------------------------- | --------------------------------------------------- |
+| `GET`  | `/api/patients?page=&page_size=` | —                                     | Paginated patient list                              |
+| `GET`  | `/api/patients/:id`              | —                                     | Single patient                                      |
+| `POST` | `/api/patients`                  | `{ name, pseudonymous_id, notes? }`   | Create patient (409 on duplicate `pseudonymous_id`) |
+| `PUT`  | `/api/patients/:id`              | `{ name?, pseudonymous_id?, notes? }` | Update patient                                      |
 
 ### Exercises
 
-| Method | Endpoint | Body | Description |
-|--------|----------|------|-------------|
-| `GET` | `/api/exercises?page=&page_size=` | — | Paginated exercise list |
-| `GET` | `/api/exercises/:id` | — | Single exercise |
-| `POST` | `/api/exercises` | `{ key, name, view, target_reps, target_sets }` | Create exercise (seeds threshold version 1) |
-| `PUT` | `/api/exercises/:id` | `{ name?, view?, target_reps?, target_sets? }` | Update exercise |
-| `PUT` | `/api/exercises/:id/thresholds` | `{ kneeValgusMaxPercent, ... }` | Replace thresholds (new immutable version) |
+| Method | Endpoint                          | Body                                            | Description                                 |
+| ------ | --------------------------------- | ----------------------------------------------- | ------------------------------------------- |
+| `GET`  | `/api/exercises?page=&page_size=` | —                                               | Paginated exercise list                     |
+| `GET`  | `/api/exercises/:id`              | —                                               | Single exercise                             |
+| `POST` | `/api/exercises`                  | `{ key, name, view, target_reps, target_sets }` | Create exercise (seeds threshold version 1) |
+| `PUT`  | `/api/exercises/:id`              | `{ name?, view?, target_reps?, target_sets? }`  | Update exercise                             |
+| `PUT`  | `/api/exercises/:id/thresholds`   | `{ kneeValgusMaxPercent, ... }`                 | Replace thresholds (new immutable version)  |
 
 ### Routines
 
-| Method | Endpoint | Body | Description |
-|--------|----------|------|-------------|
-| `GET` | `/api/routines?page=&page_size=` | — | Paginated routine list |
-| `POST` | `/api/routines` | `{ name, items: [{ exercise_id, order_index, sets, reps }] }` | Create routine with items |
-| `GET` | `/api/routines/:id/items` | — | Routine items with exercise names |
+| Method | Endpoint                         | Body                                                          | Description                       |
+| ------ | -------------------------------- | ------------------------------------------------------------- | --------------------------------- |
+| `GET`  | `/api/routines?page=&page_size=` | —                                                             | Paginated routine list            |
+| `POST` | `/api/routines`                  | `{ name, items: [{ exercise_id, order_index, sets, reps }] }` | Create routine with items         |
+| `GET`  | `/api/routines/:id/items`        | —                                                             | Routine items with exercise names |
 
 ### Sessions
 
-| Method | Endpoint | Body | Description |
-|--------|----------|------|-------------|
-| `GET` | `/api/sessions?page=&page_size=` | — | Paginated session list (joins patient/exercise names) |
-| `GET` | `/api/sessions/:id` | — | Single session |
-| `POST` | `/api/sessions` | Session summary (patient_id, exercise_id, duration_ms, sets[].reps[], ...) | Create session + sets + reps (400 on unknown patient/exercise) |
-| `POST` | `/api/sessions/:id/report` | — | Generate a draft report (Ollama → template fallback) |
+| Method | Endpoint                         | Body                                                                       | Description                                                    |
+| ------ | -------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `GET`  | `/api/sessions?page=&page_size=` | —                                                                          | Paginated session list (joins patient/exercise names)          |
+| `GET`  | `/api/sessions/:id`              | —                                                                          | Single session                                                 |
+| `POST` | `/api/sessions`                  | Session summary (patient_id, exercise_id, duration_ms, sets[].reps[], ...) | Create session + sets + reps (400 on unknown patient/exercise) |
+| `POST` | `/api/sessions/:id/report`       | —                                                                          | Generate a draft report (Ollama → template fallback)           |
 
 ### Routes index
 
@@ -225,10 +226,10 @@ npm --prefix apps/server run test
 
 ### Coverage gates
 
-| Scope | Lines | Branches | Functions | Statements |
-|-------|-------|----------|-----------|------------|
-| Shared (engine/rep/faults/validator) | ≥90% | ≥90% | ≥90% | ≥90% |
-| Server | ≥80% | ≥80% | ≥80% | ≥80% |
+| Scope                                | Lines | Branches | Functions | Statements |
+| ------------------------------------ | ----- | -------- | --------- | ---------- |
+| Shared (engine/rep/faults/validator) | ≥90%  | ≥90%     | ≥90%      | ≥90%       |
+| Server                               | ≥80%  | ≥80%     | ≥80%      | ≥80%       |
 
 Run with coverage: `npx vitest run --coverage` inside `packages/shared` or `apps/server`.
 
@@ -255,14 +256,14 @@ Runs: `npm ci` → typecheck → lint → format → unit tests → API tests �
 
 All in `docs/`:
 
-| File | Contents |
-|------|----------|
-| `DESIGN.md` | UI/UX design system, palette, color-blind-safe rules, session flow |
-| `DECISIONS.md` | Recorded architectural decisions (D1–D15) |
-| `DEPENDENCIES.md` | Pinned exact versions table with verification |
-| `KINEMATICS.md` | Kinematics engine specification |
-| `PLAN.md` | Execution phases (0–8) and task checklist |
-| `TEST_PLAN.md` | Test ID → requirement mapping and quality gates |
+| File              | Contents                                                           |
+| ----------------- | ------------------------------------------------------------------ |
+| `DESIGN.md`       | UI/UX design system, palette, color-blind-safe rules, session flow |
+| `DECISIONS.md`    | Recorded architectural decisions (D1–D15)                          |
+| `DEPENDENCIES.md` | Pinned exact versions table with verification                      |
+| `KINEMATICS.md`   | Kinematics engine specification                                    |
+| `PLAN.md`         | Execution phases (0–8) and task checklist                          |
+| `TEST_PLAN.md`    | Test ID → requirement mapping and quality gates                    |
 
 ## Contributing
 
