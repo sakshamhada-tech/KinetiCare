@@ -1,0 +1,47 @@
+{
+  "name": "kineticare",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Privacy-first, edge-AI physical therapy copilot (local-first, no cloud calls).",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "setup": "npm install && npm run copy:mediapipe-assets && npm run setup:models && npm run db:seed",
+    "copy:mediapipe-assets": "node scripts/copy-mediapipe-assets.js",
+    "setup:models": "node scripts/setup-models.js",
+    "db:seed": "node --experimental-strip-types apps/server/src/seed.ts",
+    "db:reset": "node --experimental-strip-types scripts/reset-db.js",
+    "dev": "npm run concurrently -- --names web,server \"npm --prefix apps/web run dev\" \"npm --prefix apps/server run dev\"",
+    "build:web": "npm --prefix apps/web run build",
+    "build:server": "npm --prefix apps/server run build",
+    "build": "npm run build:web && npm run build:server",
+    "start": "npm run build && node apps/server/dist/cli.js",
+    "typecheck": "tsc --noEmit -p apps/web/tsconfig.json && tsc --noEmit -p apps/server/tsconfig.json && tsc --noEmit -p packages/shared/tsconfig.json",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --check .",
+    "test:unit": "npm --prefix packages/shared run test && npm --prefix apps/web run test",
+    "test:api": "npm --prefix apps/server run test",
+    "test:e2e": "if ls -d ~/.cache/ms-playwright/chromium-* ~/.cache/ms-playwright/firefox-* ~/.cache/ms-playwright/webkit-* 2>/dev/null | grep -q .; then npx playwright test; else echo '[e2e] FAILED: no Playwright browser installed; run `npx playwright install chromium` to enable E2E tests' >&2; exit 1; fi",
+    "record:fixture": "node scripts/record-pose-fixture.js",
+    "verify": "npm ci && npm run typecheck && npm run lint && npm run format && npm run test:unit && npm run test:api && npm run build && npm run bundle:sanity && npm run test:e2e && npm run verify:scripts && npm audit --omit=dev",
+    "bundle:sanity": "node scripts/bundle-sanity.js",
+    "verify:scripts": "node scripts/verify-scripts-exist.js"
+  },
+  "workspaces": [
+    "apps/web",
+    "apps/server",
+    "packages/shared"
+  ],
+  "devDependencies": {
+    "concurrently": "10.0.6",
+    "eslint": "10.14.0",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.5.3",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.1.0",
+    "@vitest/coverage-v8": "5.1.0",
+    "playwright": "1.64.1"
+  }
+}
